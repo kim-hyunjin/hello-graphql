@@ -3,11 +3,13 @@ import { ApolloServer, gql } from 'apollo-server';
 const users = [
   {
     id: '1',
-    username: 'Kim',
+    lastName: 'Kim',
+    firstName: 'Hyunjin',
   },
   {
     id: '2',
-    username: 'Joy',
+    lastName: 'Doe',
+    firstName: 'John',
   },
 ];
 
@@ -29,6 +31,7 @@ const typeDefs = gql`
   type Query {
     allTweets: [Tweet!]!
     tweet(id: ID!): Tweet
+    allUsers: [User!]!
   }
 
   type Mutation {
@@ -44,7 +47,9 @@ const typeDefs = gql`
 
   type User {
     id: ID!
-    username: String!
+    firstName: String!
+    lastName: String
+    fullname: String!
   }
 `;
 
@@ -55,6 +60,9 @@ const resolvers = {
     },
     tweet(root, { id }) {
       return tweets.find((tweet) => tweet.id === id);
+    },
+    allUsers() {
+      return users;
     },
   },
   Mutation: {
@@ -74,6 +82,11 @@ const resolvers = {
 
       tweets = tweets.filter((tweet) => tweet.id !== id);
       return true;
+    },
+  },
+  User: {
+    fullname(root) {
+      return `${root.firstName} ${root.lastName}`;
     },
   },
 };
