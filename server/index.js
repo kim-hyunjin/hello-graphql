@@ -1,21 +1,26 @@
 import { ApolloServer, gql } from 'apollo-server';
 
-const tweets = [
+const users = [
+  {
+    id: '1',
+    username: 'Kim',
+  },
+  {
+    id: '2',
+    username: 'Joy',
+  },
+];
+
+let tweets = [
   {
     id: '1',
     text: 'hello',
-    author: {
-      id: '1',
-      username: 'Kim',
-    },
+    author: users[0],
   },
   {
     id: '2',
     text: 'how are you?',
-    author: {
-      id: '2',
-      username: 'Joy',
-    },
+    author: users[1],
   },
 ];
 
@@ -48,8 +53,27 @@ const resolvers = {
     allTweets() {
       return tweets;
     },
-    tweet(root, args) {
-      return tweets.find((tweet) => tweet.id === args.id);
+    tweet(root, { id }) {
+      return tweets.find((tweet) => tweet.id === id);
+    },
+  },
+  Mutation: {
+    postTweet(root, { text, userId }) {
+      const user = users.find((user) => user.id === userId);
+      const newTweet = {
+        id: tweets.length + 1,
+        text,
+        author: user,
+      };
+      tweets.push(newTweet);
+      return newTweet;
+    },
+    deleteTweet(root, { id }) {
+      const tweet = tweets.find((tweet) => tweet.id === id);
+      if (!tweet) return false;
+
+      tweets = tweets.filter((tweet) => tweet.id !== id);
+      return true;
     },
   },
 };
