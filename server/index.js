@@ -17,12 +17,12 @@ let tweets = [
   {
     id: '1',
     text: 'hello',
-    author: users[0],
+    userId: '1',
   },
   {
     id: '2',
     text: 'how are you?',
-    author: users[1],
+    userId: '2',
   },
 ];
 
@@ -67,11 +67,10 @@ const resolvers = {
   },
   Mutation: {
     postTweet(root, { text, userId }) {
-      const user = users.find((user) => user.id === userId);
       const newTweet = {
         id: tweets.length + 1,
         text,
-        author: user,
+        userId,
       };
       tweets.push(newTweet);
       return newTweet;
@@ -87,6 +86,11 @@ const resolvers = {
   User: {
     fullname(root) {
       return `${root.firstName} ${root.lastName}`;
+    },
+  },
+  Tweet: {
+    author(root) {
+      return users.find((user) => user.id === root.userId);
     },
   },
 };
