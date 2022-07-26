@@ -7,6 +7,11 @@ const typeDefs = gql`
     tweet(id: ID): Tweet
   }
 
+  type Mutation {
+    postTweet(text: String, userId: ID): Tweet
+    deleteTweet(id: ID): Boolean
+  }
+
   type Tweet {
     id: ID
     text: String
