@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next/types';
 import styled from 'styled-components';
@@ -51,12 +51,33 @@ const CoverImage = styled.div<CoverImageProps>`
 const Movie: NextPage = () => {
   const router = useRouter();
   const movieId = router.query.id;
-  const { data, loading, error } = useQuery<MovieData>(GET_MOVIE, { variables: { movieId } });
+  const {
+    data,
+    loading,
+    error,
+    client: { cache },
+  } = useQuery<MovieData>(GET_MOVIE, { variables: { movieId } });
+
+  const handleClick = () => {
+    cache.writeFragment({
+      id: `Movie:${movieId}`,
+      fragment: gql`
+        fragment MovieFragment on Movie {
+          isLiked
+        }
+      `,
+      data: {
+        isLiked: !data?.movie?.isLiked,
+      },
+    });
+  };
+
   return (
     <Container>
       <Column>
         <Title>{loading ? 'Loading...' : `${data?.movie?.title}`}</Title>
         <Subtitle>⭐️ {data?.movie?.rating}</Subtitle>
+        <button onClick={handleClick}>{data?.movie?.isLiked ? 'Unlike' : 'Like'}</button>
       </Column>
       <CoverImage bg={data?.movie?.medium_cover_image ?? ''} />
     </Container>
