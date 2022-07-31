@@ -8,3 +8,12 @@ export const ALL_MOVIES = gql`
     }
   }
 `;
+
+export const GET_MOVIE = gql`
+  query getMovie($movieId: String!) {
+    movie(id: $movieId) {
+      id
+      title
+    }
+  }
+`;

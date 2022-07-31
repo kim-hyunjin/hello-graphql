@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { ALL_MOVIES } from '../../graphql/query';
 import { AllMovies } from '../../graphql/types';
 
@@ -16,7 +17,9 @@ const Movies: NextPage = () => {
   return (
     <ul>
       {data?.allMovies.map((movie) => (
-        <li key={movie.id}>{movie.title}</li>
+        <li key={movie.id}>
+          <Link href={`/movies/${movie.id}`}>{movie.title}</Link>
+        </li>
       ))}
     </ul>
   );

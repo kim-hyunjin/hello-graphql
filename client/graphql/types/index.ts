@@ -6,3 +6,7 @@ export interface Movie {
 export interface AllMovies {
   allMovies: Movie[];
 }
+
+export interface MovieData {
+  movie: Movie;
+}
