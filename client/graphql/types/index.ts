@@ -1,6 +1,8 @@
 export interface Movie {
   id: number;
   title: string;
+  medium_cover_image: string;
+  rating: number;
 }
 
 export interface AllMovies {
